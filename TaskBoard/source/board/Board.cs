@@ -13,9 +13,11 @@ public class Board
         _taskPool = new List<Task>();
     }
     
-    public void AddTask(string title, string? description)
+    public int AddTask(string title, string? description = null)
     {
+        int id = _lastId;
         _taskPool.Add(new Task(_lastId++, title, description));
+        return id;
     }
 
     public Task? GetTaskById(int id)
@@ -44,6 +46,17 @@ public class Board
         _taskPool[index].Status = status;
     }
 
+    public void UpdateDescription(int id, string? description = null)
+    {
+        if (!_taskPool.Exists(t => t.Id == id))
+        {
+            throw new Exception($"Task with id {id} does not exist.");
+        }
+
+        int index = _taskPool.FindIndex(t => t.Id == id);
+        _taskPool[index].Description = description;
+    }
+    
     public void DeleteTask(int id)
     {
         if (!_taskPool.Exists(t => t.Id == id))
